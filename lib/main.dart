@@ -4,9 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:learning_app/app_bloc.dart';
-import 'package:learning_app/app_event.dart';
-import 'package:learning_app/app_state.dart';
+
+import 'package:learning_app/application/pages/detail_page/bloc/detail_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/button_pressed_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/home_bloc.dart';
 
@@ -44,12 +43,13 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => sl.get<WelcomeBloc>(),
           ),
-           BlocProvider(create: (_) => AppBloc()),
+         
           // BlocProvider(create: (_)=>SignInBloc()),
            BlocProvider(create: (_)=>sl.get<SignUpBloc>()),
            BlocProvider(create: (_) => sl.get<SignInBloc>()),
            BlocProvider(create: (_)=>sl.get<HomeBloc>()),
            BlocProvider(create: (_)=>sl.get<UserBloc>()),
+           BlocProvider(create: (_)=>sl.get<DetailBloc>()),
            BlocProvider(create: (_)=>ButtonPressedBloc())
 
         ],
@@ -68,68 +68,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: BlocBuilder<AppBloc, AppStates>(
-            builder: (context, state) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text(
-                    'You have pushed the button this many times:',
-                  ),
-                  Text(
-                    '${state.counter}',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            FloatingActionButton(
-              heroTag: "herotag1",
-              onPressed: () =>
-                  BlocProvider.of<AppBloc>(context).add(Incrementing()),
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ),
-            FloatingActionButton(
-              heroTag: "herotag2",
-              onPressed: () =>
-                  BlocProvider.of<AppBloc>(context).add(Decrementing()),
-              tooltip: 'decrement',
-              child: const Icon(Icons.minimize),
-            ),
-          ],
-        ));
-  }
-}

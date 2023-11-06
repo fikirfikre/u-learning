@@ -1,5 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:learning_app/application/pages/detail_page/bloc/detail_bloc.dart';
+import 'package:learning_app/application/pages/detail_page/detail_screen.dart';
 import 'package:learning_app/constant/list_of_courses.dart';
 
 import '../../../../domain/entity/course_entity.dart';
@@ -54,7 +57,7 @@ class _CustomeMinPageViewState extends State<CustomeMinPageView> {
                      
                        ClipRRect(
                          borderRadius: BorderRadius.circular(20),
-                        child: FadeInImage.assetNetwork(image:course.imageUrl,fit: BoxFit.cover,placeholder:"assets/images/image_loader.jpg",)),
+                        child: CustomeImage(course: course)),
                          Padding(
                            padding: const EdgeInsets.all(15.0),
                            child: Column(
@@ -75,7 +78,11 @@ class _CustomeMinPageViewState extends State<CustomeMinPageView> {
                           //   ),
                           //  )
                          const SizedBox(height: 15,),
-                          ElevatedButton(onPressed: (){}, child: Text("Continue"),style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.amber) ),)
+                          ElevatedButton(onPressed: (){
+                            print(course.courseId);
+                            BlocProvider.of<DetailBloc>(context).add(ContinueButtonPressed(courseId: course.courseId));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(courseId: course ,)));
+                          }, child: Text("Continue"),style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.amber) ),)
                                                  ],
                                                ),
                          ),
@@ -95,5 +102,19 @@ class _CustomeMinPageViewState extends State<CustomeMinPageView> {
             dotsCount: widget.courses.length)
       ],
     );
+  }
+}
+
+class CustomeImage extends StatelessWidget {
+  const CustomeImage({
+    super.key,
+    required this.course,
+  });
+
+  final CourseEntity course;
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeInImage.assetNetwork(image:course.imageUrl,fit: BoxFit.cover,placeholder:"assets/images/image_loader.jpg",);
   }
 }

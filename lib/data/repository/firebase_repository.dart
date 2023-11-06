@@ -2,11 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learning_app/data/Exception/exception.dart';
 import 'package:learning_app/data/datasource/remote_datasource/firebase_remote_datasource.dart';
-import 'package:learning_app/domain/entity/course_entity.dart';
-import 'package:learning_app/domain/entity/user_entity.dart';
-import 'package:learning_app/domain/repository/firebase_repository.dart';
 
+import '../../domain/entity/course_entity.dart';
+import '../../domain/entity/user_entity.dart';
+import '../../domain/entity/video_entity.dart';
 import '../../domain/failure/failure.dart';
+import '../../domain/repository/firebase_repository.dart';
+
+
 
 class FirebaseRepositoryImpl implements FirebaseRepository{
   final FirebaseRemoteDataSource firebaseRemoteDataSource;
@@ -65,6 +68,16 @@ class FirebaseRepositoryImpl implements FirebaseRepository{
     try {
       final result = await firebaseRemoteDataSource.logout();
       return left(result);
+    } catch (e) {
+      return right(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<List<VideoEntity>, Failure>> getListOfVideo(String courseId) async{
+    try {
+      final result = await firebaseRemoteDataSource.getListOfVideo(courseId);
+      return  left(result);
     } catch (e) {
       return right(ServerFailure());
     }

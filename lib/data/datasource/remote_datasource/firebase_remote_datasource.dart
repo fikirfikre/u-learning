@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learning_app/data/models/course_model.dart';
-import 'package:learning_app/domain/entity/user_entity.dart';
+import 'package:learning_app/data/models/video_model.dart';
 
+
+import '../../../domain/entity/user_entity.dart';
 import '../../models/user_model.dart';
 
 abstract class FirebaseRemoteDataSource {
@@ -10,4 +12,6 @@ abstract class FirebaseRemoteDataSource {
   Future<List<CourseModel>> fetchCourse();
   Future<UserModel> getUser(String id);
   Future<void> logout();
+  Future<List<VideoModel>> getListOfVideo(String courseId);
+  
 }

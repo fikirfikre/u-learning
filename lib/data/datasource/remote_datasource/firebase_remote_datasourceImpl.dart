@@ -4,8 +4,10 @@ import 'package:learning_app/data/Exception/exception.dart';
 import 'package:learning_app/data/datasource/remote_datasource/firebase_remote_datasource.dart';
 import 'package:learning_app/data/models/course_model.dart';
 import 'package:learning_app/data/models/user_model.dart';
-import 'package:learning_app/domain/entity/course_entity.dart';
-import 'package:learning_app/domain/entity/user_entity.dart';
+import 'package:learning_app/data/models/video_model.dart';
+
+
+import '../../../domain/entity/user_entity.dart';
 
 class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
    final FirebaseAuth auth;
@@ -63,6 +65,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
         
         return CourseModel.fromFirestore(doc);
       }).toList();
+      final id = courses[0];
+     await getListOfVideo(id.courseId);
 
       return courses;
       
@@ -95,6 +99,21 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
     } catch (e) {
       throw ServerException();
     }
+  }
+
+  @override
+  Future<List<VideoModel>> getListOfVideo(String courseId) async{
+    try {
+    DocumentSnapshot courseSnapshot = await store.collection("course").doc(courseId).get();
+    CollectionReference videosCollection = courseSnapshot.reference.collection('video');
+    QuerySnapshot videoQuerySnapshot = await videosCollection.get();
+    List<VideoModel> videos = videoQuerySnapshot.docs.map((doc) => VideoModel.fromFirestore(doc)).toList();
+    return videos;
+    } catch (e) {
+      throw ServerException();
+    }
+
+
   }
  
 

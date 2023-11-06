@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learning_app/domain/entity/course_entity.dart';
 import 'package:learning_app/domain/entity/user_entity.dart';
+import 'package:learning_app/domain/entity/video_entity.dart';
 import 'package:learning_app/domain/failure/failure.dart';
 
 abstract class FirebaseRepository{
@@ -11,6 +12,7 @@ abstract class FirebaseRepository{
   Future<Either<List<CourseEntity>,Failure>> getCourses();
   Future<Either<UserEntity,Failure>> getUser(String id);
   Future<Either<void,Failure>> logout();
+  Future<Either<List<VideoEntity>, Failure>> getListOfVideo(String courseId);
 
   
 }
