@@ -10,3 +10,7 @@ final class ContinueButtonPressed extends DetailEvent {
   final String courseId;
   ContinueButtonPressed({required this.courseId});
 }
+final class VerifyPayment extends DetailEvent{
+  final String courseId;
+  VerifyPayment({required this.courseId});
+}

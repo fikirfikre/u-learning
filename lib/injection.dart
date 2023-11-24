@@ -2,15 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:learning_app/application/pages/detail_page/bloc/detail_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/home_bloc.dart';
+import 'package:learning_app/application/pages/payment_page/bloc/payment_bloc.dart';
 
 import 'package:learning_app/application/pages/signin_page/bloc/sign_in_bloc.dart';
 import 'package:learning_app/application/pages/user/bloc/user_bloc.dart';
 import 'package:learning_app/application/pages/welcom_page/bloc/welcom_bloc.dart';
 import 'package:learning_app/data/datasource/local_datasource/sharedprefernce_datasourceImpl.dart';
+import 'package:learning_app/data/datasource/remote_datasource/django_remote_datasourceImpl.dart';
 import 'package:learning_app/data/datasource/remote_datasource/firebase_remote_datasourceImpl.dart';
+import 'package:learning_app/data/repository/django_repository_impl.dart';
 import 'package:learning_app/data/repository/firebase_repository.dart';
 import 'package:learning_app/data/repository/shared_preference_repository_impl.dart';
+import 'package:learning_app/domain/repository/django_repository.dart';
 import 'package:learning_app/domain/repository/firebase_repository.dart';
+import 'package:learning_app/domain/usecase/add_courses_to_user.dart';
+import 'package:learning_app/domain/usecase/create_payment.dart';
 import 'package:learning_app/domain/usecase/get_course_usecase.dart';
 import 'package:learning_app/domain/usecase/get_videos_usecase.dart';
 import 'package:learning_app/domain/usecase/sharedPreference_usecases.dart';
@@ -54,4 +60,16 @@ Future<void> init() async{
   //detail(video)
   sl.registerFactory(() => DetailBloc(videoUseCases: sl()));
   sl.registerFactory(() => VideoUseCases(firebaseRepository: sl()));
+
+  //make payment
+  sl.registerFactory(() => PaymentBloc(addCourseToUserList: sl()));
+  sl.registerFactory(() => DjangoRemoteDatasourceImpl());
+  sl.registerFactory<DjangoRepository>(() => DjangoRepositoryImpl(djanogRemoteDatasource: sl()));
+  sl.registerFactory(() => PaymentWithStrip(djangoRepository: sl()));
+
+  //add course
+  sl.registerFactory(() => AddCourseToUserList(firebaseRepository: sl()));
+
+  //isthe user pay
+ 
 }

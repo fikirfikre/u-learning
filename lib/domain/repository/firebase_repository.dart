@@ -13,6 +13,7 @@ abstract class FirebaseRepository{
   Future<Either<UserEntity,Failure>> getUser(String id);
   Future<Either<void,Failure>> logout();
   Future<Either<List<VideoEntity>, Failure>> getListOfVideo(String courseId);
-
+  Future<Either<void,Failure>> addCourseToUserList(String courseId);
+  Future<Either<bool,Failure>> isTheUserPain(String courseId);
   
 }

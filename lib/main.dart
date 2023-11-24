@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'package:learning_app/application/pages/detail_page/bloc/detail_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/button_pressed_bloc.dart';
@@ -14,19 +15,24 @@ import 'package:learning_app/application/pages/signin_page/sign_in_screen.dart';
 import 'package:learning_app/application/pages/signup_page/bloc/sign_up_bloc.dart';
 import 'package:learning_app/application/pages/signup_page/sign_up_screen.dart';
 import 'package:learning_app/application/pages/user/bloc/user_bloc.dart';
+import 'package:learning_app/application/pages/video_page/bloc/video_app_bloc.dart';
+
+import 'package:learning_app/application/pages/video_page/video_play_screen.dart';
 import 'package:learning_app/application/pages/welcom_page/bloc/welcom_bloc.dart';
-import 'package:learning_app/application/pages/welcom_page/welcome_screen.dart';
-import 'package:learning_app/data/datasource/local_datasource/sharepreference_datasource.dart';
+
 import 'package:learning_app/domain/usecase/sharedPreference_usecases.dart';
 import 'package:learning_app/injection.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'application/pages/payment_page/bloc/payment_bloc.dart';
+import 'application/pages/welcom_page/welcome_screen.dart';
 import 'firebase_options.dart';
 import 'injection.dart' as d;
-
+import '.env';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await d.init(); 
+   Stripe.publishableKey = "publish Key";
+   await Stripe.instance.applySettings();
+   await d.init(); 
   runApp(const MyApp());
 }
 
@@ -50,7 +56,10 @@ class MyApp extends StatelessWidget {
            BlocProvider(create: (_)=>sl.get<HomeBloc>()),
            BlocProvider(create: (_)=>sl.get<UserBloc>()),
            BlocProvider(create: (_)=>sl.get<DetailBloc>()),
-           BlocProvider(create: (_)=>ButtonPressedBloc())
+           BlocProvider(create: (_)=>ButtonPressedBloc()),
+           BlocProvider(create: (_)=>sl.get<PaymentBloc>()),
+           BlocProvider(create: (_)=>VideoAppBloc()),
+
 
         ],
         child: ScreenUtilInit(
@@ -61,7 +70,8 @@ class MyApp extends StatelessWidget {
                   appBarTheme: const AppBarTheme(
                       elevation: 0, backgroundColor: Colors.white,titleTextStyle: TextStyle(color: Colors.black,fontSize: 20))),
               debugShowCheckedModeBanner: false,
-              home: !result ? Welcome() : SignInPage()
+              home: !result ?const Welcome() : SignInPage()
+              // home:const VideoApp(),
             );
           },
         ));

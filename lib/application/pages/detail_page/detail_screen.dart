@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/home_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/widget/custom_min_page.dart';
 import 'package:learning_app/application/pages/home_screen/widget/custom_text.dart';
+import 'package:learning_app/application/pages/payment_page/payment_screen.dart';
 import 'package:learning_app/application/pages/profile_page/widget/list_of_settings.dart';
+import 'package:learning_app/application/pages/setting_page/setting_screen.dart';
+import 'package:learning_app/application/pages/video_list_page/video_list_screen.dart';
 import 'package:learning_app/application/pages/welcom_page/widget/button.dart';
 import 'package:learning_app/domain/entity/course_entity.dart';
 import 'package:learning_app/domain/entity/video_entity.dart';
@@ -46,8 +49,14 @@ class DetailPage extends StatelessWidget {
               return MainScreen(
                 course: courseId,
                 videos: state.videos,
+                isItPaid: state.isItPaid,
               );
-              }else{
+              
+          
+              }
+          
+              
+              else{
                 return Container();
               }
             },
@@ -59,9 +68,10 @@ class DetailPage extends StatelessWidget {
 }
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key, required this.course,required this.videos});
+  const MainScreen({super.key, required this.course,required this.videos,required this.isItPaid});
   final CourseEntity course;
   final List<VideoEntity> videos;
+  final bool isItPaid;
 
   @override
   Widget build(BuildContext context) {
@@ -113,9 +123,18 @@ class MainScreen extends StatelessWidget {
           "${course.description}",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        const Padding(
+         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
-          child: CustomeButton(buttonText: "Go Buy"),
+          child: GestureDetector(
+            onTap: (){
+              print(isItPaid);
+              if(!isItPaid){
+              Navigator.push(context, MaterialPageRoute(builder: (_)=>PaymentPage(courses:course,)));
+              }else{
+              Navigator.push(context,MaterialPageRoute(builder:(_)=>VideoListScreen(videos:videos) ));
+              }
+            },
+            child:!isItPaid?CustomeButton(buttonText: "Go Buy"):CustomeButton(buttonText: "Start")),
         ),
         Text(
           "The Courses Includes",
@@ -125,53 +144,72 @@ class MainScreen extends StatelessWidget {
         CustomeRowWidget(
             label: "${course.lessonNum} total hours",
             icon: Icons.video_camera_back),
-        CustomeRowWidget(
+     const   CustomeRowWidget(
             label: "Total 30 Lessons", icon: Icons.document_scanner),
-        CustomeRowWidget(label: "67 download files", icon: Icons.file_copy),
+    const    CustomeRowWidget(label: "67 download files", icon: Icons.file_copy),
         Text(
           "Lesson List",
           style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.start,
         ),
         for (var i = 0; i < videos.length; i++) ...{
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                          padding: EdgeInsets.all(10),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset("assets/images/first.jpg",
-                                  fit: BoxFit.fill)),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              videos[i].titlte,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            Text("ui design"),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Icon(Icons.arrow_forward_ios_outlined),
-                  ],
-                ),
-              ))
+          VideoCard(videos: videos, i: i)
         }
       ],
     );
+  }
+}
+
+class VideoCard extends StatelessWidget {
+  const VideoCard({
+    super.key,
+    required this.videos,
+    required this.i,
+  });
+
+  final List<VideoEntity> videos;
+
+  final int i;
+
+  @override
+  Widget build(BuildContext context) {
+  final video =videos[i];
+  
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Card(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: EdgeInsets.all(10),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset("assets/images/first.jpg",
+                            fit: BoxFit.fill)),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        videos[i].titlte,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text("lesson ${i+1}"),
+                    ],
+                  ),
+                ],
+              ),
+              Icon(Icons.arrow_forward_ios_outlined),
+            ],
+          ),
+        ));
   }
 }

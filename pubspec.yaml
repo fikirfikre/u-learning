@@ -47,6 +47,12 @@ dependencies:
   shared_preferences: ^2.2.2
   hydrated_bloc: ^9.1.2
   video_player: ^2.7.2
+  flutter_stripe: ^9.5.0+1
+  http: ^1.1.0
+  path_provider: ^2.1.1
+  
+
+
 
 dev_dependencies:
   flutter_test:

@@ -13,5 +13,7 @@ abstract class FirebaseRemoteDataSource {
   Future<UserModel> getUser(String id);
   Future<void> logout();
   Future<List<VideoModel>> getListOfVideo(String courseId);
+  Future<void> addCourseToUserList(String courseId);
+  Future<bool> isTheUserPaid(String courseId);
   
 }

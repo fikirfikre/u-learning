@@ -11,4 +11,8 @@ class VideoUseCases {
   Future<Either<List<VideoEntity>,Failure>> getListOfVideo(String courseId){
     return  firebaseRepository.getListOfVideo(courseId);
   }
+
+  Future<Either<bool,Failure>> isTheUserPaid(String courseId){
+return firebaseRepository.isTheUserPain(courseId);
+  }
 }

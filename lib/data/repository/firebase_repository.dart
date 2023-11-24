@@ -83,5 +83,26 @@ class FirebaseRepositoryImpl implements FirebaseRepository{
     }
   }
   
+  @override
+  Future<Either<void, Failure>> addCourseToUserList(String courseId) async{
+    try{
+      final result= await firebaseRemoteDataSource.addCourseToUserList(courseId);
+      return left(result);
+
+    }catch(e){
+      return right(ServerFailure());
+    }
+  }
+  
+  @override
+  Future<Either<bool, Failure>> isTheUserPain(String courseId) async{
+    try {
+      final result = await firebaseRemoteDataSource.isTheUserPaid(courseId);
+      return left(result);
+    } catch (e) {
+      return right(ServerFailure());
+    }
+  }
+  
 
 }

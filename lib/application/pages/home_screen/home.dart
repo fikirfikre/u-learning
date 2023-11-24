@@ -1,11 +1,8 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/button_pressed_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/widget/search_bar.dart';
 import 'package:learning_app/application/pages/user/bloc/user_bloc.dart';
-import 'package:learning_app/application/pages/welcom_page/widget/dots.dart';
 import 'package:learning_app/domain/entity/course_entity.dart';
 
 import 'bloc/home_bloc.dart';
@@ -155,7 +152,7 @@ class MinWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.all(8),
+      padding:const EdgeInsets.all(8),
       sliver: SliverGrid(
           delegate: SliverChildBuilderDelegate(
               childCount: courses.length,   
@@ -163,7 +160,7 @@ class MinWidget extends StatelessWidget {
                          borderRadius: BorderRadius.circular(20),
                         child: FadeInImage.assetNetwork(image:courses[index].imageUrl,fit: BoxFit.cover,placeholder:"assets/images/image_loader.jpg",)),
                         ),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, mainAxisSpacing: 15, crossAxisSpacing: 15)),
     );
   }

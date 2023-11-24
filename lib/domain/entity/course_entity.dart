@@ -11,6 +11,7 @@ class CourseEntity extends Equatable {
   final int price;
   final bool follow;
   // final String userId;
+  final List<String>? listOfuser;
 
   final String typeId;
   final String imageUrl;
@@ -25,9 +26,10 @@ class CourseEntity extends Equatable {
       required this.score,
       required this.price,
       required this.follow,
-      // required this.userId,
+       
       required this.typeId,
-      required this.imageUrl});
+      required this.imageUrl,
+      this.listOfuser=const [],});
 
   @override
   // TODO: implement props

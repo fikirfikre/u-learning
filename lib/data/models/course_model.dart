@@ -14,13 +14,15 @@ class CourseModel extends CourseEntity with EquatableMixin {
       required super.price,
       required super.score,
       required super.typeId,
-      required super.updatedAt});
+      required super.updatedAt,
+      required super.listOfuser});
 
   factory CourseModel.fromFirestore(DocumentSnapshot doc) {
 Map<String, dynamic> json = doc.data() as Map<String,dynamic>;
     final imageUrl = json["image_url"];
 
     return CourseModel(
+       
         courseId: doc.id,
         createdAt: (json["created_at"] ).toDate(),
         description: json["description"],
@@ -31,6 +33,7 @@ Map<String, dynamic> json = doc.data() as Map<String,dynamic>;
         price: json["price"],
         score: json["score"],
         typeId: json["type_id"].id,
-        updatedAt: (json["updated_at"]).toDate());
+        updatedAt: (json["updated_at"]).toDate(),
+        listOfuser: json["listOfuser"]);
   }
 }
