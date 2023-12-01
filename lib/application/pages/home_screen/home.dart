@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 List<CourseEntity> courses = state.courses;
                 final userState = BlocProvider.of<UserBloc>(context).state;
                 
+                
                 return CustomScrollView(
                   // crossAxisAlignment: CrossAxisAlignment.stretch,
                   slivers: [
@@ -58,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     if(userState is UserFetched) ...{
+                      
                           SliverToBoxAdapter(
                       child: Text(
                         userState.user.userName,

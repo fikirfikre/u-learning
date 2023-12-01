@@ -15,7 +15,7 @@ part 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   final AddCourseToUserList addCourseToUserList;
-  PaymentBloc({required this.addCourseToUserList}) : super(const PaymentState()) {
+  PaymentBloc({required this.addCourseToUserList}) : super(const PaymentState().copywWith(status:PaymentStatus.initial)) {
     on<PaymentStart>(_onPaymentStart);
     on<PaymentCreateIntent>(_onPaymentCreate);
     on<PaymentConfirmIntent>(_onPaymentConfirmIntent);

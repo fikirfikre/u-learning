@@ -15,5 +15,6 @@ abstract class FirebaseRepository{
   Future<Either<List<VideoEntity>, Failure>> getListOfVideo(String courseId);
   Future<Either<void,Failure>> addCourseToUserList(String courseId);
   Future<Either<bool,Failure>> isTheUserPain(String courseId);
+  Future<Either<List<CourseEntity>,Failure>> getUserCourses();
   
 }

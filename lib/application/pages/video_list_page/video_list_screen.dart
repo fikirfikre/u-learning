@@ -13,15 +13,28 @@ class VideoListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: ListView.builder(
-        itemCount: videos.length,
-        itemBuilder: (contex,index){
-           return GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>VideoApp(url:videos[index].url ,)));
-            }, 
-            child: VideoCard(videos: videos, i: index));
-        }),
+      backgroundColor: Colors.white,
+      
+      appBar: AppBar(
+        title:const Text("Lessons",style: TextStyle(color: Colors.amber,fontWeight: FontWeight.w900,fontSize: 28),),
+        centerTitle: true,
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.amber,)),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: videos.length,
+          itemBuilder: (contex,index){
+             return GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>VideoApp(url:videos[index].url,videos: videos,selectedVideo: index,)));
+              }, 
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: VideoCard(videos: videos, i: index),
+              ));
+          }),
+      ),
     );
   }
 }

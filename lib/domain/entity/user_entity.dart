@@ -5,10 +5,13 @@ class UserEntity extends Equatable {
   final String userName;
   final String email;
   final String password;
-  final List<String>? listOfCourse;
+  final String imageUrl;
+  final List<dynamic> listOfCourse;
 
   UserEntity(
-      { this.userId="",
+
+      { this.imageUrl="",
+        this.userId="",
        this.userName ="",
        this.email="",
        this.password="",

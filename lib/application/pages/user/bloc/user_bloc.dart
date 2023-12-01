@@ -11,7 +11,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({required this.userUseCases}) : super(UserInitial()) {
     on<GetUserIdEvent>((event, emit) async{
      final result = await userUseCases.getUser(event.userId);
-      result.fold((user) => emit (UserFetched(user:user)), (r) => null);
+      result.fold((user) {
+        print(user);
+         emit (UserFetched(user:user));}, (r) => null);
     });
   }
 }

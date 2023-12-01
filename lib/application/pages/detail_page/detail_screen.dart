@@ -24,17 +24,17 @@ class DetailPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Courses Detail"),
         centerTitle: true,
-        actions: [
+        leading:
           IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.arrow_back_ios))
-        ],
+              icon: const Icon(Icons.arrow_back_ios,color: Colors.amber,))
+        ,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
+        
           child: BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               if (state is DetailLoading){
@@ -46,10 +46,12 @@ class DetailPage extends StatelessWidget {
                 );
               }
               else if (state is DetailSuccess){
-              return MainScreen(
-                course: courseId,
-                videos: state.videos,
-                isItPaid: state.isItPaid,
+              return SingleChildScrollView(
+                child: MainScreen(
+                  course: courseId,
+                  videos: state.videos,
+                  isItPaid: state.isItPaid,
+                ),
               );
               
           
@@ -62,7 +64,7 @@ class DetailPage extends StatelessWidget {
             },
           ),
         ),
-      ),
+      
     );
   }
 }
@@ -161,14 +163,15 @@ class MainScreen extends StatelessWidget {
 }
 
 class VideoCard extends StatelessWidget {
-  const VideoCard({
+   VideoCard({
     super.key,
     required this.videos,
     required this.i,
+    this.isSelected= false
   });
 
-  final List<VideoEntity> videos;
-
+  final List videos;
+  bool isSelected;
   final int i;
 
   @override
@@ -178,6 +181,7 @@ class VideoCard extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Card(
+          color:isSelected? Colors.white.withOpacity(0.1) : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

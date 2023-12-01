@@ -104,5 +104,15 @@ class FirebaseRepositoryImpl implements FirebaseRepository{
     }
   }
   
+  @override
+  Future<Either<List<CourseEntity>, Failure>> getUserCourses() async{
+   try {
+    final result = await firebaseRemoteDataSource.getUserCourses();
+     return left(result);
+   } catch (e) {
+     return right(ServerFailure());
+   }
+  }
+  
 
 }

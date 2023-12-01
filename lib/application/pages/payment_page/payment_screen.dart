@@ -20,53 +20,62 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Make Payment"),
+        title: const Text("Make Payment",style:TextStyle(color: Colors.amber,fontWeight: FontWeight.bold,fontSize: 20)),
         centerTitle: true,
-        actions: [
+        leading: 
           IconButton(
               color: Colors.black,
               onPressed: () {
-                Navigator.pop(context);
-                context.read<PaymentBloc>().add(PaymentStart());
+             
+                
+                   Navigator.pop(context);
+                   
+                   
               },
               icon: const Icon(Icons.clear))
-        ],
+        
       ),
       body: BlocBuilder<PaymentBloc, PaymentState>(
         builder: (context, state) {
           if(state.status == PaymentStatus.initial){
             CardFormEditController controller = CardFormEditController(initialDetails: state.cardFieldInputDetails);
-               return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Card Form",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              CardFormField(
-                onCardChanged: (details){
-                  print(details);
-                  // context.read<PaymentBloc>().add(const PaymentCreateIntent(billingDetails:BillingDetails(email: "fikir@gmail.com")));
-                  },
-                style: CardFormStyle(
-                    cursorColor: Colors.amber, placeholderColor: Colors.amber),
-                controller: controller
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                  child: GestureDetector(
-                    onTap: (){
-                      context.read<PaymentBloc>().add( PaymentCreateIntent(billingDetails:const BillingDetails(email: "fikir@gmail.com"),courses: widget.courses));
-                    },
-                      child: const CustomeButton(buttonText: "Pay")))
-            ],
-          );
+               return Padding(
+                padding:const EdgeInsets.symmetric(vertical: 30,horizontal:15),
+                 child: SingleChildScrollView(
+                   child: Column(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                             children: [
+                               Text(
+                    "Card Form",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    
+                               ),
+                               const SizedBox(
+                    height: 40,
+                               ),
+                               CardFormField(
+                    onCardChanged: (details){
+                      print(details);
+                      // context.read<PaymentBloc>().add(const PaymentCreateIntent(billingDetails:BillingDetails(email: "fikir@gmail.com")));
+                      },
+                    style: CardFormStyle(
+                        cursorColor: Colors.amber, placeholderColor: Colors.amber),
+                    controller: controller
+                               ),
+                               const SizedBox(
+                    height: 20,
+                               ),
+                               Center(
+                      child: GestureDetector(
+                        onTap: (){
+                          context.read<PaymentBloc>().add( PaymentCreateIntent(billingDetails:const BillingDetails(email: "fikir@gmail.com"),courses: widget.courses));
+                        },
+                          child: const CustomeButton(buttonText: "Pay")))
+                             ],
+                           ),
+                 ),
+               );
 
           }
          else if (state.status == PaymentStatus.loading){

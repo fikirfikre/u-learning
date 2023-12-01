@@ -2,11 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:learning_app/application/pages/edit_profile_page/edit_profile_screen.dart';
 import 'package:learning_app/application/pages/home_screen/widget/more_menu.dart';
+import 'package:learning_app/application/pages/list_of_user_course_page/bloc/courses_bloc.dart';
+import 'package:learning_app/application/pages/list_of_user_course_page/list_of_courses_screen.dart';
 import 'package:learning_app/application/pages/profile_page/widget/list_of_option.dart';
 import 'package:learning_app/application/pages/profile_page/widget/list_of_settings.dart';
 import 'package:learning_app/application/pages/setting_page/setting_screen.dart';
 import 'package:learning_app/application/pages/user/bloc/user_bloc.dart';
+import 'package:learning_app/domain/entity/user_entity.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -30,18 +34,24 @@ class ProfilePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
              mainAxisAlignment: MainAxisAlignment.start,
             children: [
-            const  ProfilePicture(),
+            
               if(userState is UserFetched)...{
+                  ProfilePicture(user: userState.user,),
                 Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(userState.user.userName,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
               ),
               },
               
-           const   Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomContainer(icon: Icons.camera_alt_rounded,label: "My Courses",),
+                  GestureDetector(
+                    onTap: (){
+                      context.read<CoursesBloc>().add(MyCoursesButtonClicked());
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=>ListOfCoursesScreen()));
+                    },
+                    child: CustomContainer(icon: Icons.camera_alt_rounded,label: "My Courses",)),
                   CustomContainer(icon: Icons.book_sharp, label: "Buy Courses"),
                   CustomContainer(icon: Icons.star, label: "4.9")
                 ],
@@ -73,29 +83,49 @@ class ProfilePage extends StatelessWidget {
 class ProfilePicture extends StatelessWidget {
   const ProfilePicture({
     super.key,
+    required this.user
   });
-
+  final UserEntity user;
   @override
   Widget build(BuildContext context) {
     return Stack(
      alignment: Alignment.center,
       children: [
-       const CircleAvatar(
+        if(user.imageUrl == "")...{
+           CircleAvatar(
           radius: 50,
-          backgroundImage: AssetImage("assets/images/first.jpg"),
+          backgroundColor: const Color.fromARGB(255, 58, 50, 50),
+          child: Text(user.userName[0].toUpperCase(),style:const TextStyle(
+            color: Colors.amber,
+            fontSize: 35,
+            fontWeight: FontWeight.w900
+          ),),
         ),
+
+        },
+       if(user.imageUrl !="")...{
+        CircleAvatar(
+          radius: 50,
+          backgroundImage: NetworkImage(user.imageUrl),
+        ),
+       },
         Positioned(
           bottom: 0,
           right:5,
-          child: Container(
-           padding: EdgeInsets.all(3),
-            
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-                                color: Colors.amber,
-            ),
-            child:const Icon(Icons.edit,color: Colors.white,),
-        )
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_)=>const EditProfileScreen()));
+            },
+            child: Container(
+             padding: EdgeInsets.all(3),
+              
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                                  color: Colors.amber,
+              ),
+              child:const Icon(Icons.edit,color: Colors.white,),
+                  ),
+          )
         )
       ],
     );

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:learning_app/application/pages/detail_page/bloc/detail_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/home_bloc.dart';
+import 'package:learning_app/application/pages/list_of_user_course_page/bloc/courses_bloc.dart';
 import 'package:learning_app/application/pages/payment_page/bloc/payment_bloc.dart';
 
 import 'package:learning_app/application/pages/signin_page/bloc/sign_in_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:learning_app/domain/repository/firebase_repository.dart';
 import 'package:learning_app/domain/usecase/add_courses_to_user.dart';
 import 'package:learning_app/domain/usecase/create_payment.dart';
 import 'package:learning_app/domain/usecase/get_course_usecase.dart';
+import 'package:learning_app/domain/usecase/get_user_courses_usecase.dart';
 import 'package:learning_app/domain/usecase/get_videos_usecase.dart';
 import 'package:learning_app/domain/usecase/sharedPreference_usecases.dart';
 import 'package:learning_app/domain/usecase/user_usecases.dart';
@@ -69,7 +71,9 @@ Future<void> init() async{
 
   //add course
   sl.registerFactory(() => AddCourseToUserList(firebaseRepository: sl()));
-
+  //get user courses
+  sl.registerFactory(() => GetUserCourseUsecase(firebaseRepository: sl()));
+  sl.registerFactory(() => CoursesBloc(getUserCourseUsecase: sl()));
   //isthe user pay
  
 }

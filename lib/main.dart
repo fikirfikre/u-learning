@@ -9,6 +9,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:learning_app/application/pages/detail_page/bloc/detail_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/button_pressed_bloc.dart';
 import 'package:learning_app/application/pages/home_screen/bloc/home_bloc.dart';
+import 'package:learning_app/application/pages/list_of_user_course_page/bloc/courses_bloc.dart';
 
 import 'package:learning_app/application/pages/signin_page/bloc/sign_in_bloc.dart';
 import 'package:learning_app/application/pages/signin_page/sign_in_screen.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
            BlocProvider(create: (_)=>sl.get<DetailBloc>()),
            BlocProvider(create: (_)=>ButtonPressedBloc()),
            BlocProvider(create: (_)=>sl.get<PaymentBloc>()),
+           BlocProvider(create: (_)=>sl.get<CoursesBloc>()),
            BlocProvider(create: (_)=>VideoAppBloc()),
 
 

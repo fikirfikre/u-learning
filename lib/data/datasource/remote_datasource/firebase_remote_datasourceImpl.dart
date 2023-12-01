@@ -15,8 +15,10 @@ import '../../../domain/entity/user_entity.dart';
 
 class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
    final FirebaseAuth auth;
+   final currentUser = FirebaseAuth.instance.currentUser;
    final  FirebaseFirestore store = FirebaseFirestore.instance;
     UserCredential? currnetUser;
+    List<CourseModel>? listOfWholeCourses;
    FirebaseRemoteDataSourceImpl({required this.auth});
   @override
   Future<UserCredential> signIn(UserEntity user) async{
@@ -77,7 +79,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
     // DjangoRemoteDatasourceImpl django = DjangoRemoteDatasourceImpl();
     // String ans =  await django.createPaymentIntent();
     // print(ans);
-
+      listOfWholeCourses = courses;
+    
       return courses;
       
     } catch (e) {
@@ -89,7 +92,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
   @override
   Future<UserModel> getUser(id) async{
     try {
-      final user =  store.collection("users").doc(id);
+      // final currentUser = FirebaseAuth.instance.currentUser;
+      final user =  store.collection("users").doc(currentUser!.uid);
       DocumentSnapshot querySnapshot = await user.get();
 
       Map<String,dynamic> json = querySnapshot.data() as Map<String,dynamic>;
@@ -128,7 +132,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
   
   @override
   Future<void> addCourseToUserList(String courseId) async{
-    final currentUser = FirebaseAuth.instance.currentUser;
+    // final currentUser = FirebaseAuth.instance.currentUser;
     DocumentReference<Map<String,dynamic>> userDocument = store.collection("users").doc(currentUser!.uid);
      await userDocument.get().then((value) {
       if(value.exists){
@@ -153,8 +157,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
   Future<bool> isTheUserPaid(String courseId) async{
   bool? existed;
    try {
-         final user = FirebaseAuth.instance.currentUser;
-    DocumentReference<Map<String,dynamic>> userDocument = store.collection("users").doc(user!.uid);
+        //  final user = FirebaseAuth.instance.currentUser;
+    DocumentReference<Map<String,dynamic>> userDocument = store.collection("users").doc(currentUser!.uid);
    await userDocument.get().then((value){
       if(value.exists){
            List listOfCourse = value.data()?["listOfCourse"]??[];
@@ -172,6 +176,33 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
     
    
   }
+  
+  @override
+  Future<List<CourseModel>> getUserCourses() async{
+    List listOfcourses = [];
+    List<CourseModel> listOfCourseModel =[];
+    try {
+        DocumentReference<Map<String,dynamic>> userDocument =  store.collection("users").doc(currentUser!.uid);
+    await userDocument.get().then((value){
+    
+      listOfcourses = value.data()?['listOfCourse']??[];
+    });
+    
+    for(var i=0; i<listOfcourses.length; i++){
+      DocumentReference<Map<String,dynamic>> courseDocument = store.collection("course").doc(listOfcourses[i]);
+      DocumentSnapshot course = await courseDocument.get();
+      // Map<String,dynamic> courseJson =   course.data() as Map<String,dynamic>;
+      CourseModel courseModel = CourseModel.fromFirestore(course);
+      listOfCourseModel.add(courseModel);
+    }
+    return listOfCourseModel; 
+    } catch (e) {
+      throw ServerException();
+    }
  
 
+
+ 
+
+}
 }
